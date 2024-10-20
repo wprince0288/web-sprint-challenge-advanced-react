@@ -45,15 +45,15 @@ export default function AppFunctional(props) {
     const x = index % 3;
     const y = Math.floor(index / 3);
 
-   let newX = x;
-   let newY = y;
+    let newX = x;
+    let newY = y;
 
-   if (direction === 'left') newX = x > 0 ? x - 1 : x;
-   if (direction === 'right') newX = x < 2 ? x + 1 : x;
-   if (direction === 'up') newY = y > 0 ? y - 1 : y;
-   if (direction === 'down') newY = y < 2  ? y + 1 : y;
+    if (direction === 'left') newX = x > 0 ? x - 1 : x;
+    if (direction === 'right') newX = x < 2 ? x + 1 : x;
+    if (direction === 'up') newY = y > 0 ? y - 1 : y;
+    if (direction === 'down') newY = y < 2 ? y + 1 : y;
 
-   return newY * 3 + newX;
+    return newY * 3 + newX;
   }
 
   function move(evt) {
@@ -73,10 +73,32 @@ export default function AppFunctional(props) {
     setEmail(evt.target.value);
   }
 
-  function onSubmit(evt) {
+  const onSubmit = async (evt) => {
     // Use a POST request to send a payload to the server.
     evt.preventDefault();
-     }
+    try {
+      const response = await fetch('http://localhost:9000/api/result', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email,
+          steps: steps,
+          x: getXY().x,
+          y: getXY().y
+        }),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        setMessage(result.message || 'Success!');
+      } else {
+        setMessage(result.message || 'Error occured');
+      }
+    } catch (error) {
+      setMessage('An unexpected error occured.');
+    }
+  };
+
 
   return (
     <div id="wrapper" className={props.className}>
@@ -94,7 +116,7 @@ export default function AppFunctional(props) {
         }
       </div>
       <div className="info">
-        <h3 id="message"></h3>
+        <h3 id="message">{message}</h3>
       </div>
       <div id="keypad">
         <button id="left" onClick={move}>LEFT</button>
