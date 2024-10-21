@@ -62,9 +62,20 @@ export default function AppFunctional(props) {
     const direction = evt.target.id;
     const nextIndex = getNextIndex(direction);
 
-    if (nextIndex !== index) {
+    if (nextIndex === index) {
+      if (direction === 'up') {
+        setMessage("You can't go up");
+      } else if (direction === 'down') {
+        setMessage("You can't go down");
+      } else if (direction === 'left') {
+        setMessage("You can't go left");
+      } else if (direction === 'right') {
+        setMessage("You can't go right")
+      }
+    } else {
       setIndex(nextIndex);
       setSteps(steps + 1);
+      setMessage('');
     }
   }
 
@@ -104,7 +115,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">{getXYMessage()}</h3>
-        <h3 id="steps">You moved {steps} times</h3>
+        <h3 id="steps">You moved {steps} {steps === 1 ? 'time' : 'times'}</h3>
       </div>
       <div id="grid">
         {
@@ -130,5 +141,5 @@ export default function AppFunctional(props) {
         <input id="submit" type="submit"></input>
       </form>
     </div>
-  )
+  );
 }
