@@ -35,7 +35,7 @@ export default function AppFunctional(props) {
     setIndex(initialIndex);
     setSteps(initialSteps);
     setEmail(initialEmail);
-    setMessage(initialMessage);
+    setMessage('');
   }
 
   function getNextIndex(direction) {
@@ -102,6 +102,7 @@ export default function AppFunctional(props) {
       const result = await response.json();
       if (response.ok) {
         setMessage(result.message || 'Success!');
+        setEmail('');
       } else {
         setMessage(result.message || 'Error occured');
       }
